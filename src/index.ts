@@ -8,7 +8,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Autenticação com API Key
 app.use((req: Request, res: Response, next: NextFunction) => {
   const key = req.headers['x-api-key'];
   if (key !== process.env.API_KEY) {
@@ -17,16 +16,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// Configuração da AWS
 AWS.config.update({
-  region: 'us-east-1', // Você pode mudar conforme necessário
+  region: 'us-east-1', 
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 });
 
 const sns = new AWS.SNS();
 
-// Endpoint para enviar SMS
 app.post('/send-sms', async (req: Request, res: Response) => {
   const { phone, message } = req.body;
 
